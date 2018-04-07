@@ -1,0 +1,3 @@
+2018-04-04 22:55:54.344[main]DEBUG com.imooc.o2o.dao.ShopDao.updateShop-==>  Preparing: update tb_shop SET shop_desc=?, shop_addr=?, last_edit_time=? where shop_id=? 
+2018-04-04 22:55:54.447[main]DEBUG com.imooc.o2o.dao.ShopDao.updateShop-==> Parameters: 测试描述(String), 测试地址(String), 2018-04-04 22:55:53.101(Timestamp), 1(Long)
+2018-04-04 22:55:54.815[main]DEBUG com.imooc.o2o.dao.ShopDao.updateShop-<==    Updates: 1

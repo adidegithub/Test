@@ -15,7 +15,7 @@ public class PathUtil {
 		String os = System.getProperty("os.name");
 		String basePath = "";
 		if (os.toLowerCase().startsWith("win")) {
-			basePath = "F:/tu";
+			basePath = "F:/tu1/";
 		} else {
 			basePath = "/home/adi/image/";
 
@@ -25,7 +25,8 @@ public class PathUtil {
 	}
 
 	public static String getShopImagePath(long shopId) {
-		String imagePath = "/upload/item/shop/" + shopId + "/";
+		//有问题,获取不到图片的相对值路径。
+		String imagePath = "upload/item/shop/" + shopId + "/";
 		return imagePath.replace("/", seperator);
 	}
 }

@@ -8,10 +8,11 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
-
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Positions;
+
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 public class ImageUtil {
 	private static String basePath = Thread.currentThread().getContextClassLoader()
@@ -19,6 +20,7 @@ public class ImageUtil {
 	//System.out.println(basePath);
 	private static final SimpleDateFormat sDateFormat=new SimpleDateFormat("yyyyMMddHHmmss");
 	private static final Random r =new Random();
+	//private static  Logger logger= (Logger) LoggerFactory.getLogger(Shop.class);
 	//String 自带的文件处理对象CommonsMultipartFile，图片的存储路径是targetAddr
 	public static String generateThumbnail(CommonsMultipartFile thumbnail,String targetAddr){
 		//图片名称为系统随机生成的 不重名的。
@@ -35,6 +37,30 @@ public class ImageUtil {
 			.watermark(Positions.BOTTOM_RIGHT, ImageIO.read(new File(basePath+"/watermark.jpg")), 0.25f)
 			.outputQuality(0.8f).toFile(dest);
 		}catch(IOException e){
+			e.printStackTrace();
+		}
+		//新增部分；
+		return relativeAddr;
+		
+	}
+	public static String generateThumbnail(File thumbnail,String targetAddr){
+		//图片名称为系统随机生成的 不重名的。
+		String realFileName=getRandomFileName();
+		//图片的扩展名比如说：jpg、png...
+		String extension=getFileExtension(thumbnail);
+		markDirPath(targetAddr);
+		//获取图片的相对路径
+		String relativeAddr=targetAddr+realFileName+extension;
+		//logger.debug("current relativeAddr is:"+relativeAddr);
+		//组成新生成的文件的路径
+		File dest=new File(PathUtil.getImgBasePath()+relativeAddr);
+		//logger.debug("current complete addr is:"+PathUtil.getImgBasePath()+relativeAddr);
+		try{
+			Thumbnails.of(thumbnail).size(200, 200)
+			.watermark(Positions.BOTTOM_RIGHT, ImageIO.read(new File(basePath+"/watermark.jpg")), 0.25f)
+			.outputQuality(0.8f).toFile(dest);
+		}catch(IOException e){
+			//logger.error(e.toString());	
 			e.printStackTrace();
 		}
 		//新增部分；
@@ -63,6 +89,10 @@ public class ImageUtil {
 		String originalFileName=cFile.getOriginalFilename();
 		return originalFileName.substring(originalFileName.lastIndexOf("."));
 	}
+	private static String getFileExtension(File cFile) {
+		String originalFileName=((MultipartFile) cFile).getOriginalFilename();
+		return originalFileName.substring(originalFileName.lastIndexOf("."));
+	}
 	/**
 	 * 生成随机文件名，当前时间年月日时分秒+5位随机数
 	 * @return
@@ -76,12 +106,12 @@ public class ImageUtil {
 
 	public static void main(String[] args) throws IOException {
 		Thumbnails
-				.of(new File("/F:/tu/green.jpg"))
+				.of(new File("F:/tu/green.jpg"))
 				//尺寸200X200
 				.size(200, 200)
 				.watermark(Positions.BOTTOM_RIGHT,
 						ImageIO.read(new File(basePath + "/watermark.jpg")),
 						//透明度0.25f，图片压缩到80%，即0.8f,将它输出到原来的路径，为了区分，改个新名字。
-						0.25f).outputQuality(0.8f).toFile("/F:/tu/greennew.jpg");
+						0.25f).outputQuality(0.8f).toFile("F:/tu/greennew.jpg");
 	}
 }
